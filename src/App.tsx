@@ -1,6 +1,9 @@
+import { useState, useEffect } from "react";
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { addDoc, collection, query, onSnapshot } from 'firebase/firestore';
+import { db } from "@/firebase"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -15,23 +18,26 @@ import {
 import { Input } from "@/components/ui/input"
 
 const formSchema = z.object({
-  username: z.string().min(2).max(50),
+  text: z.string().min(2).max(50),
 })
 
-function ProfileForm() {
-  // 1. Define your form.
+function AddReviewForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      text: "",
     },
   })
  
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const docRef = await addDoc(collection(db, 'reviews'),
+        values,
+      );
+      console.log('Document written with ID: ', docRef.id);
+    } catch (error) {
+      console.error('Error adding document: ', error);
+    }
   }
 
   return (
@@ -39,10 +45,10 @@ function ProfileForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="username"
+          name="text"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Review</FormLabel>
               <FormControl>
                 <Input placeholder="shadcn" {...field} />
               </FormControl>
@@ -60,19 +66,34 @@ function ProfileForm() {
 }
 
 function App() {
+
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    const reviews = query(collection(db, "reviews"));
+    onSnapshot(reviews, (querySnapshot) => {
+      const updatedReviews = querySnapshot.docs.map(x => x.data())
+      setReviews(updatedReviews)
+    });
+  }, []);
+
   return (
     <>
       <div
-        style={{
-          width: 400,
-          padding: 15,
-          margin: '30px auto',
-          border: '1px solid gray',
-          borderRadius: 10
-        }}
+        style={{ width: 400, padding: 20, margin: '30px auto', border: '1px solid #ccc', borderRadius: 10 }}
       >
-        <ProfileForm />
+        <AddReviewForm />
       </div>
+      {
+        reviews?.map((review, index) => (
+          <div
+            key={index}
+            style={{ width: 400, padding: 20, margin: '10px auto', border: '1px solid #ccc', borderRadius: 10 }}
+          >
+            {review.text}
+          </div>
+        ))
+      }
     </>
   )
 }
