@@ -67,3 +67,25 @@
     @apply bg-background text-foreground;
   }
 }
+
+::-webkit-scrollbar {
+  display: none
+}
+
+@media screen and (max-width: 800px) {
+  .review-card-container {
+    padding-left: calc((100% - 320px)/2);
+  }
+}
+
+@media screen and (min-width: 801px) and (max-width: 1199px) {
+  .review-card-container {
+    padding-left: calc((100% - 660px)/2);
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .review-card-container {
+    padding-left: calc((100% - 1000px)/2);
+  }
+}

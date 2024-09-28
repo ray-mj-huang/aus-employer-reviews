@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -209,6 +209,80 @@ function AddReviewForm() {
   )
 }
 
+function ReviewCard({ review, maxHeight = 320 }) {
+  const [isExpanded, setIsExpanded] = useState(false); // 控制是否展開
+  const [isOverflowing, setIsOverflowing] = useState(false); // 控制是否顯示「閱讀更多」
+  const contentRef = useRef(null);
+
+  useEffect(() => {
+    // 檢查內容是否超過最大高度
+    if (contentRef.current && contentRef.current.scrollHeight > maxHeight) {
+      setIsOverflowing(true);
+    }
+  }, [review.comment, maxHeight]);
+
+  return (
+    <div
+      ref={contentRef}
+      style={{
+        position: 'relative',
+        maxHeight: isExpanded ? 'none' : `${maxHeight}px`,
+        minHeight: maxHeight,
+        overflow: 'hidden',
+        transition: 'max-height 0.3s ease',
+        width: 320,
+        margin: '5px 20px 15px 0',
+        border: '1px solid #ccc',
+        borderRadius: 10
+      }}
+    >
+      <div
+        style={{
+          padding: 20,
+          // background: (isOverflowing && !isExpanded)
+          //   ? 'red'
+          //   : 'white',
+          overflow: 'hidden'
+        }}
+      >
+        <div>{review.state}</div>
+          <div>{review.location}</div>
+          <br />
+          <div>{review.lastYearWorked}</div>
+          <div>{review.workplaceName}</div>
+          <div>{review.jobTitle}</div>
+          <div
+            style={{
+              whiteSpace: 'pre-wrap',
+              paddingBottom: 45
+            }}
+          >
+            {review.comment}
+          </div>
+      </div>
+      {/* 如果內容超過高度，顯示「閱讀更多」按鈕 */}
+      {isOverflowing && (
+        <button
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            background: 'white',
+            width: '100%',
+            padding: '10px 0',
+            display: 'flex',
+            justifyContent: 'center',
+            borderTop: 'solid 1px #cccccc',
+            boxShadow: isExpanded ? 'none' : '2px 2px 40px 10px rgba(0, 0, 0, 0.7)'
+          }}
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          {isExpanded ? 'Collapse' : 'Read More'}
+        </button>
+      )}
+    </div>
+  );
+}
+
 function App() {
 
   const [reviews, setReviews] = useState([]);
@@ -223,27 +297,21 @@ function App() {
 
   return (
     <>
-      <div
+      {/* <div
         style={{ width: 400, padding: 20, margin: '30px auto', border: '1px solid #ccc', borderRadius: 10 }}
       >
         <AddReviewForm />
+      </div> */}
+      <div
+        style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'start', paddingTop: 20 }}
+        className="review-card-container"
+      >
+        {
+          reviews?.map((review, index) => (
+            <ReviewCard key={index} review={review} />
+          ))
+        }
       </div>
-      {
-        reviews?.map((review, index) => (
-          <div
-            key={index}
-            style={{ width: 400, padding: 20, margin: '10px auto', border: '1px solid #ccc', borderRadius: 10 }}
-          >
-            <div>{review.state}</div>
-            <div>{review.location}</div>
-            <br />
-            <div>{review.lastYearWorked}</div>
-            <div>{review.workplaceName}</div>
-            <div>{review.jobTitle}</div>
-            <div style={{ whiteSpace: 'pre-wrap' }}>{review.comment}</div>
-          </div>
-        ))
-      }
     </>
   )
 }
