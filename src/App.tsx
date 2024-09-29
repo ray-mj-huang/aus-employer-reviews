@@ -35,7 +35,7 @@ import {
   DialogTrigger
 } from "@/components/ui/dialog"
 
-import { Plus } from "lucide-react"
+import { Plus, ChevronDown, ChevronUp } from "lucide-react"
 
 const AUSstateList = [
   {
@@ -245,14 +245,13 @@ function ReviewCard({ review, maxHeight = 320 }) {
         transition: 'max-height 0.3s ease',
         width: 320,
         margin: '5px 20px 15px 0',
-        border: '1px solid #ccc',
-        borderRadius: 10
+        borderRadius: 10,
+        background: '#171717'
       }}
     >
       <div
         style={{
           padding: 20,
-          // background: (isOverflowing && !isExpanded)
           //   ? 'red'
           //   : 'white',
           overflow: 'hidden'
@@ -279,17 +278,27 @@ function ReviewCard({ review, maxHeight = 320 }) {
           style={{
             position: 'absolute',
             bottom: 0,
-            background: 'white',
+            background: 'black',
             width: '100%',
             padding: '10px 0',
             display: 'flex',
             justifyContent: 'center',
-            borderTop: 'solid 1px #cccccc',
-            boxShadow: isExpanded ? 'none' : '2px 2px 40px 10px rgba(0, 0, 0, 0.7)'
+            // borderTop: 'solid 0.5px #cccccc',
+            boxShadow: isExpanded ? 'none' : '2px 2px 70px 60px rgba(0, 0, 0, 0.9)',
+            fontSize: 14
           }}
           onClick={() => setIsExpanded(!isExpanded)}
         >
-          {isExpanded ? 'Collapse' : 'Read More'}
+          {isExpanded
+            ? <>
+              <ChevronUp style={{ marginRight: 6 }} color="#f4b510"/>
+              Collapse
+            </>
+            : <>
+              <ChevronDown style={{ marginRight: 6 }} color="#f4b510"/>
+              Read More
+            </>
+          }
         </button>
       )}
     </div>
@@ -313,7 +322,12 @@ function App() {
   }, []);
 
   return (
-    <div style={{ positon: 'relative' }}>
+    <div
+      style={{
+        background:'#1e1e1e',
+        color: 'white'
+      }}
+    >
       <div
         className="flex flex-col items-center"
       >
