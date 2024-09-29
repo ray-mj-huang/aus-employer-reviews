@@ -313,7 +313,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <div style={{ positon: 'relative' }}>
       <div
         className="flex flex-col items-center"
       >
@@ -347,7 +347,13 @@ function App() {
           ))
         }
       </div>
-    </>
+      <Button
+        onClick={() => setOpenAddReviewModal(true)}
+        className="w-[50px] h-[50px] rounded-[25px] bg-black bg-gradient-to-r from-black to-neutral-900 via-black hover:bg-gradient-to-r hover:from-neutral-900 hover:to-neutral-800 hover:via-neutral-800 flex flex-col justify-center items-center cursor-pointer fixed right-5 bottom-5"
+      >
+        <Plus size={32} color="#f4b510" />
+      </Button>
+    </div>
   )
 }
 
