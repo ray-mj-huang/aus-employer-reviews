@@ -35,7 +35,7 @@ import {
   DialogTrigger
 } from "@/components/ui/dialog"
 
-import { Label } from "@/components/ui/label"
+import { Plus } from "lucide-react"
 
 const AUSstateList = [
   {
@@ -314,20 +314,29 @@ function App() {
 
   return (
     <>
-      <Dialog open={openAddReviewModal} onOpenChange={setOpenAddReviewModal}>
-        <DialogTrigger asChild>
-          <Button variant="outline">Add Review</Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[400px] lg:max-w-[400] overflow-y-scroll max-h-screen">
-          <DialogHeader>
-            <DialogTitle>Add Review</DialogTitle>
-            <DialogDescription>
-              Let's add a review of your unique work experience!
-            </DialogDescription>
-          </DialogHeader>
-          <AddReviewForm setOpenAddReviewModal={setOpenAddReviewModal} />
-        </DialogContent>
-      </Dialog>
+      <div
+        className="flex flex-col items-center"
+      >
+        <Dialog open={openAddReviewModal} onOpenChange={setOpenAddReviewModal}>
+          <DialogTrigger asChild>
+            <Button
+              className="w-[320px] h-[120px] rounded-[10px] bg-black bg-gradient-to-r from-black to-neutral-900 via-black hover:bg-gradient-to-r hover:from-neutral-900 hover:to-neutral-800 hover:via-neutral-800 my-[20px] mx-0 p-[15px_0_22px] flex flex-col justify-evenly items-center text-[24px] tracking-wide cursor-pointer md:my-[20px_0_0_0]"
+            >
+              <Plus size={32} color="#f4b510" className="mt-1" />
+              Add a Review
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[400px] lg:max-w-[400] overflow-y-scroll max-h-screen">
+            <DialogHeader>
+              <DialogTitle>Add a Review</DialogTitle>
+              <DialogDescription>
+                Let's add a review of your unique work experience!
+              </DialogDescription>
+            </DialogHeader>
+            <AddReviewForm setOpenAddReviewModal={setOpenAddReviewModal} />
+          </DialogContent>
+        </Dialog>
+      </div>
       <div
         style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'start', paddingTop: 20 }}
         className="review-card-container"
