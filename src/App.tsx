@@ -25,6 +25,18 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from "@/components/ui/dialog"
+
+import { Label } from "@/components/ui/label"
+
 const AUSstateList = [
   {
     value: 'NSW',
@@ -72,7 +84,7 @@ const formSchema = z.object({
   comment: z.string().min(2, 'Comment is required').max(3000),
 })
 
-function AddReviewForm() {
+function AddReviewForm({ setOpenAddReviewModal }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -91,9 +103,10 @@ function AddReviewForm() {
       const docRef = await addDoc(collection(db, 'reviews'),
         values,
       );
-      console.log(values)
-      console.log('Document written with ID: ', docRef.id);
+      // console.log(values)
+      // console.log('Document written with ID: ', docRef.id);
       reset()
+      setOpenAddReviewModal(false)
     } catch (error) {
       console.error('Error adding document: ', error);
     }
@@ -283,9 +296,13 @@ function ReviewCard({ review, maxHeight = 320 }) {
   );
 }
 
+
+
 function App() {
 
   const [reviews, setReviews] = useState([]);
+
+  const [openAddReviewModal, setOpenAddReviewModal] = useState(false)
 
   useEffect(() => {
     const reviews = query(collection(db, "reviews"));
@@ -297,11 +314,20 @@ function App() {
 
   return (
     <>
-      {/* <div
-        style={{ width: 400, padding: 20, margin: '30px auto', border: '1px solid #ccc', borderRadius: 10 }}
-      >
-        <AddReviewForm />
-      </div> */}
+      <Dialog open={openAddReviewModal} onOpenChange={setOpenAddReviewModal}>
+        <DialogTrigger asChild>
+          <Button variant="outline">Add Review</Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[400px] lg:max-w-[400] overflow-y-scroll max-h-screen">
+          <DialogHeader>
+            <DialogTitle>Add Review</DialogTitle>
+            <DialogDescription>
+              Let's add a review of your unique work experience!
+            </DialogDescription>
+          </DialogHeader>
+          <AddReviewForm setOpenAddReviewModal={setOpenAddReviewModal} />
+        </DialogContent>
+      </Dialog>
       <div
         style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'start', paddingTop: 20 }}
         className="review-card-container"
