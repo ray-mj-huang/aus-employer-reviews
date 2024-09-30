@@ -72,6 +72,41 @@ const AUSstateList = [
   }
 ];
 
+const stateColorList = [
+  {
+    value: 'NSW',
+    color: '#A0C4FF'
+  },
+  {
+    value: 'VIC',
+    color: '#BDB2FF'
+  },
+  {
+    value: 'QLD',
+    color: '#FFD6A5'
+  },
+  {
+    value: 'SA',
+    color: '#FFADAD'
+  },
+  {
+    value: 'WA',
+    color: '#CAFFBF'
+  },
+  {
+    value: 'TAS',
+    color: '#9BF6FF'
+  },
+  {
+    value: 'NT',
+    color: '#FDFFB6'
+  },
+  {
+    value: 'ACT',
+    color: '#f3d8c7'
+  }
+] 
+
 
 const formSchema = z.object({
   state: z.enum(['NSW', 'VIC', 'QLD', 'SA', 'WA', 'TAS', 'NT', 'ACT'], {
@@ -251,26 +286,55 @@ function ReviewCard({ review, maxHeight = 320 }) {
     >
       <div
         style={{
-          padding: 20,
-          //   ? 'red'
-          //   : 'white',
-          overflow: 'hidden'
+          padding: '15px 20px 20px',
+          overflow: 'hidden',
+          color: '#AAAAAA'
         }}
       >
-        <div>{review.state}</div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1.5px solid #1e1e1e', paddingBottom: 12, marginBottom: 18 }}>
           <div>{review.location}</div>
-          <br />
-          <div>{review.lastYearWorked}</div>
-          <div>{review.workplaceName}</div>
-          <div>{review.jobTitle}</div>
           <div
             style={{
-              whiteSpace: 'pre-wrap',
-              paddingBottom: 45
+              background: stateColorList?.find(item => item.value === review.state)?.color || '#171717',
+              color: 'black',
+              padding: '1px 12px',
+              borderRadius: 20,
+              fontSize: 12
             }}
-          >
-            {review.comment}
+            >
+            {review.state}
           </div>
+        </div>
+
+        <div style={{ fontSize: 12, margin: '5px 0 0 0', color: '#444444' }}>
+          Last Year Worked: {' '}
+          <span style={{  }}>{review.lastYearWorked}</span>
+        </div>
+        <div style={{ fontSize: 25, color: 'white' }}>{review.workplaceName}</div>
+        <div
+          style={{
+            // background: '#f4b510',
+            // color: 'black',
+            // padding: '0 12px',
+            color: '#f4b510',
+            fontWeight: 600,
+            display: 'inline-block',
+            margin: '3px 0 0 0'
+          }}
+        >
+          {review.jobTitle}
+        </div>
+
+        <div
+          style={{
+            whiteSpace: 'pre-wrap',
+            padding: '10px 0 45px 0',
+            fontSize: 14,
+            letterSpacing: 1,
+          }}
+        >
+          {review.comment}
+        </div>
       </div>
       {/* 如果內容超過高度，顯示「閱讀更多」按鈕 */}
       {isOverflowing && (
