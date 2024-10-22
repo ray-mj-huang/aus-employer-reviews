@@ -4,12 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { addDoc, collection, query, onSnapshot } from 'firebase/firestore';
 import { db } from "@/firebase"
-
 import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -24,18 +22,13 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea";
-
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
   DialogClose
 } from "@/components/ui/dialog"
-
 import { Plus, ChevronDown, ChevronUp } from "lucide-react"
 
 const AUSstateList = [
@@ -108,7 +101,6 @@ const stateColorList = [
   }
 ] 
 
-
 const formSchema = z.object({
   state: z.enum(['NSW', 'VIC', 'QLD', 'SA', 'WA', 'TAS', 'NT', 'ACT'], {
     errorMap: () => ({ message: 'Please select a state' }),
@@ -139,8 +131,6 @@ function AddReviewForm({ setOpenAddReviewModal }) {
       const docRef = await addDoc(collection(db, 'reviews'),
         values,
       );
-      // console.log(values)
-      // console.log('Document written with ID: ', docRef.id);
       reset()
       setOpenAddReviewModal(false)
     } catch (error) {
@@ -150,7 +140,7 @@ function AddReviewForm({ setOpenAddReviewModal }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8" style={{ padding: '40px 0 20px' }}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 pt-10 pb-5">
         {/* State */}
         <FormField
           control={form.control}
@@ -273,56 +263,31 @@ function ReviewCard({ review, maxHeight = 320 }) {
   return (
     <div
       ref={contentRef}
+      className="relative overflow-hidden w-[320px] m-[5px_20px_15px_0] rounded-[10px] bg-[#171717]"
       style={{
-        position: 'relative',
         maxHeight: isExpanded ? 'none' : `${maxHeight}px`,
-        minHeight: maxHeight,
-        overflow: 'hidden',
-        transition: 'max-height 0.3s ease',
-        width: 320,
-        margin: '5px 20px 15px 0',
-        borderRadius: 10,
-        background: '#171717'
+        minHeight: `${maxHeight}px`
       }}
     >
-      <div
-        style={{
-          padding: '15px 20px 20px',
-          overflow: 'hidden',
-          color: '#AAAAAA'
-        }}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1.5px solid #1e1e1e', paddingBottom: 12, marginBottom: 18 }}>
+      <div className="p-[15px_20px_20px] overflow-hidden text-[#AAAAAA]">
+        <div className="flex justify-between items-center border-b-[1.5px] border-[#1e1e1e] pb-3 mb-4">
           <div>{review.location}</div>
           <div
+            className="text-black p-[1px_12px] rounded-[20px] text-[12px]"
             style={{
               background: stateColorList?.find(item => item.value === review.state)?.color || '#171717',
-              color: 'black',
-              padding: '1px 12px',
-              borderRadius: 20,
-              fontSize: 12
             }}
             >
             {review.state}
           </div>
         </div>
 
-        <div style={{ fontSize: 12, margin: '5px 0 0 0', color: '#444444' }}>
+        <div className="text-[12px] mt-[5px] text-[#444444]">
           Last Year Worked: {' '}
-          <span style={{  }}>{review.lastYearWorked}</span>
+          <span>{review.lastYearWorked}</span>
         </div>
-        <div style={{ fontSize: 25, color: 'white' }}>{review.workplaceName}</div>
-        <div
-          style={{
-            // background: '#f4b510',
-            // color: 'black',
-            // padding: '0 12px',
-            color: '#f4b510',
-            fontWeight: 600,
-            display: 'inline-block',
-            margin: '3px 0 0 0'
-          }}
-        >
+        <div className="text-[25px] text-white">{review.workplaceName}</div>
+        <div className="text-[#f4b510] font-semibold inline-block mt-[3px]">
           {review.jobTitle}
         </div>
 
@@ -369,8 +334,6 @@ function ReviewCard({ review, maxHeight = 320 }) {
     </div>
   );
 }
-
-
 
 function App() {
 
