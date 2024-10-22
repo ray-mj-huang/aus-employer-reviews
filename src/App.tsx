@@ -32,7 +32,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
+  DialogClose
 } from "@/components/ui/dialog"
 
 import { Plus, ChevronDown, ChevronUp } from "lucide-react"
@@ -149,7 +150,7 @@ function AddReviewForm({ setOpenAddReviewModal }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8" style={{ padding: '40px 0 20px' }}>
         {/* State */}
         <FormField
           control={form.control}
@@ -393,6 +394,16 @@ function App() {
       }}
     >
       <div
+        style={{
+          fontFamily: 'Courgette, cursive',
+          fontSize: 48,
+          textAlign: 'center',
+          padding: '35px 0 10px'
+        }}
+      >
+        AUS Good Boss
+      </div>
+      <div
         className="flex flex-col items-center"
       >
         <Dialog open={openAddReviewModal} onOpenChange={setOpenAddReviewModal}>
@@ -405,13 +416,20 @@ function App() {
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[400px] lg:max-w-[400] overflow-y-scroll max-h-screen">
-            <DialogHeader>
+            {/* <DialogHeader>
               <DialogTitle>Add a Review</DialogTitle>
               <DialogDescription>
                 Let's add a review of your unique work experience!
               </DialogDescription>
-            </DialogHeader>
+            </DialogHeader> */}
             <AddReviewForm setOpenAddReviewModal={setOpenAddReviewModal} />
+            <DialogFooter className="sm:justify-start">
+              <DialogClose asChild>
+                <Button type="button" variant="outline" style={{ margin: '0 0 30px 0' }}>
+                  Close
+                </Button>
+              </DialogClose>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
