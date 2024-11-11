@@ -292,12 +292,7 @@ function ReviewCard({ review, maxHeight = 320 }) {
         </div>
 
         <div
-          style={{
-            whiteSpace: 'pre-wrap',
-            padding: '10px 0 45px 0',
-            fontSize: 14,
-            letterSpacing: 1,
-          }}
+          className="text-[14px] tracking-[1px] whitespace-pre-wrap py-2.5 pb-[45px]"
         >
           {review.comment}
         </div>
@@ -305,27 +300,19 @@ function ReviewCard({ review, maxHeight = 320 }) {
       {/* 如果內容超過高度，顯示「閱讀更多」按鈕 */}
       {isOverflowing && (
         <button
+          className="absolute bottom-0 w-full p-[10px_0] flex justify-center text-[14px] bg-black"
           style={{
-            position: 'absolute',
-            bottom: 0,
-            background: 'black',
-            width: '100%',
-            padding: '10px 0',
-            display: 'flex',
-            justifyContent: 'center',
-            // borderTop: 'solid 0.5px #cccccc',
-            boxShadow: isExpanded ? 'none' : '2px 2px 70px 60px rgba(0, 0, 0, 0.9)',
-            fontSize: 14
+            boxShadow: isExpanded ? 'none' : '2px 2px 70px 60px rgba(0, 0, 0, 0.9)'
           }}
           onClick={() => setIsExpanded(!isExpanded)}
         >
           {isExpanded
             ? <>
-              <ChevronUp style={{ marginRight: 6 }} color="#f4b510"/>
+              <ChevronUp className="mr-2" color="#f4b510"/>
               Collapse
             </>
             : <>
-              <ChevronDown style={{ marginRight: 6 }} color="#f4b510"/>
+              <ChevronDown className="mr-2" color="#f4b510"/>
               Read More
             </>
           }
@@ -351,18 +338,10 @@ function App() {
 
   return (
     <div
-      style={{
-        background:'#1e1e1e',
-        color: 'white'
-      }}
+      className="bg-[#1e1e1e] text-white"
     >
       <div
-        style={{
-          fontFamily: 'Courgette, cursive',
-          fontSize: 48,
-          textAlign: 'center',
-          padding: '35px 0 10px'
-        }}
+        className="font-courgette text-[48px] text-center pt-[35px] pb-[10px]"
       >
         AUS Good Boss
       </div>
@@ -388,7 +367,7 @@ function App() {
             <AddReviewForm setOpenAddReviewModal={setOpenAddReviewModal} />
             <DialogFooter className="sm:justify-start">
               <DialogClose asChild>
-                <Button type="button" variant="outline" style={{ margin: '0 0 30px 0' }}>
+                <Button type="button" variant="outline" className="mb-[30px]">
                   Close
                 </Button>
               </DialogClose>
@@ -397,8 +376,7 @@ function App() {
         </Dialog>
       </div>
       <div
-        style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'start', paddingTop: 20 }}
-        className="review-card-container"
+        className="review-card-container flex flex-wrap items-start pt-[20px]"
       >
         {
           reviews?.map((review, index) => (
