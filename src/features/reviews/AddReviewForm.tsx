@@ -1,21 +1,19 @@
+import { useAppDispatch } from "@/store/hooks";
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { addDoc, collection } from 'firebase/firestore';
-import { db } from "@/firebase"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { formSchema } from "@/pages/Home/containers/schemas"
-import { AUSstateList } from "@/pages/Home/containers/constants"
+import { formSchema } from "@/features/reviews/schemas"
+import { AUSstateList } from "@/features/reviews/constants"
+import { setAddReviewModal, addReview } from './reviewsSlice';
 
-interface AddReviewFormProps {
-  setOpenAddReviewModal: (open: boolean) => void;
-}
-
-export default function AddReviewForm({ setOpenAddReviewModal }: AddReviewFormProps) {
+export default function AddReviewForm() {
+  const dispatch = useAppDispatch();
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -31,11 +29,9 @@ export default function AddReviewForm({ setOpenAddReviewModal }: AddReviewFormPr
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const docRef = await addDoc(collection(db, 'reviews'),
-        values,
-      );
+      await dispatch(addReview(values)).unwrap();
+      dispatch(setAddReviewModal(false))
       reset()
-      setOpenAddReviewModal(false)
     } catch (error) {
       console.error('Error adding document: ', error);
     }

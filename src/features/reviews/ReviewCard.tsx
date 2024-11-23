@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import { ChevronDown, ChevronUp } from "lucide-react"
-import { stateColorList } from "@/pages/Home/containers/constants"
+import { stateColorList } from "@/features/reviews/constants"
 import { Review } from "@/lib/types"
 
 interface ReviewCardProps {
@@ -10,12 +10,12 @@ interface ReviewCardProps {
 
 export default function ReviewCard({ review, maxHeight = 320 }: ReviewCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isOverflowing, setIsOverflowing] = useState(false);
+  const [isOverflow, setIsOverflow] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (contentRef.current) {
-      setIsOverflowing(contentRef.current.scrollHeight > maxHeight);
+      setIsOverflow(contentRef.current.scrollHeight > maxHeight);
     }
   }, [maxHeight]);
 
@@ -25,21 +25,21 @@ export default function ReviewCard({ review, maxHeight = 320 }: ReviewCardProps)
     <div className="relative w-[320px] m-[20px] rounded-[10px] overflow-hidden">
       <div
         ref={contentRef}
-        className="bg-black p-[20px] text-white"
+        className="bg-[#171717] p-[20px] text-[#AAAAAA]"
         style={{
           maxHeight: isExpanded ? 'none' : maxHeight,
           overflow: isExpanded ? 'visible' : 'hidden'
         }}
       >
-        <div className="flex items-center">
+        <div className="flex justify-between items-center">
+          <div className="text-[12px] text-[#444444]">
+            {review.location}
+          </div>
           <div
             className="text-[14px] px-[10px] py-[3px] rounded-[5px] mr-[10px]"
             style={{ backgroundColor: stateColor }}
           >
             {review.state}
-          </div>
-          <div className="text-[12px] text-[#444444]">
-            {review.location}
           </div>
         </div>
 
@@ -57,7 +57,7 @@ export default function ReviewCard({ review, maxHeight = 320 }: ReviewCardProps)
         </div>
       </div>
 
-      {isOverflowing && (
+      {isOverflow && (
         <button
           className="absolute bottom-0 w-full p-[10px_0] flex justify-center text-[14px] bg-black"
           style={{
